@@ -634,63 +634,224 @@ em { font-style: italic; }
   color: #92928b;
 }
 
-/* ---------- Contact ---------- */
+/* ---------- Contact: dark inset plate closer ----------
+   First-design composition (ghost word + framed plate + rail +
+   2-col grid with booking card). No pulse dot, no location lines. */
 .contact {
-  min-height: 75vh;
-  padding: clamp(72px, 12vw, 170px) 8vw;
+  position: relative;
+  overflow: clip;
+  background: var(--dark);
+  color: var(--light);
+  --accent: #e8836b;
+  -webkit-font-smoothing: antialiased;
+  padding: clamp(56px, 8vw, 120px) clamp(20px, 4vw, 56px);
+}
+
+.contact-ghost {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.22em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(120px, 24vw, 340px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(241, 240, 235, 0.13);
+  pointer-events: none;
+  user-select: none;
+}
+
+.contact-inner {
+  position: relative;
+  border: 1px solid rgba(241, 240, 235, 0.16);
+  border-radius: 20px;
+  padding: clamp(32px, 5vw, 72px) clamp(24px, 5vw, 72px);
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgba(232, 131, 107, 0.16), transparent 55%),
+    radial-gradient(100% 100% at 0% 100%, rgba(241, 240, 235, 0.06), transparent 50%),
+    var(--dark);
+}
+
+.contact-top {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(241, 240, 235, 0.16);
 }
 
-.contact h2 {
-  font-size: clamp(54px, 9vw, 135px);
-  line-height: .9;
-  letter-spacing: -.03em;
+.contact .eyebrow {
+  margin: 0;
+  color: #92928b;
 }
 
-.cta {
-  margin-top: clamp(40px, 5vw, 65px);
-  width: fit-content;
-  border-bottom: 1px solid var(--text);
-  padding-bottom: 9px;
-  font-size: 15px;
-  transition: padding .3s var(--ease), color .3s ease;
-}
-
-.cta:hover {
-  padding-right: 15px;
-  color: var(--accent);
-}
-
-.cta span { margin-left: 20px; }
-
-.contact-note {
-  margin: 26px 0 0;
+.availability {
+  margin: 0;
   font-family: var(--font-mono);
   font-size: var(--label-size);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(241, 240, 235, 0.72);
 }
+
+.contact h2 {
+  margin-top: clamp(24px, 3.5vw, 44px);
+  font-size: clamp(48px, 8.4vw, 124px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.contact h2 em {
+  color: var(--accent);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+  margin-top: clamp(28px, 4vw, 56px);
+}
+
+.contact-copy {
+  margin: 0;
+  max-width: 44ch;
+  color: rgba(241, 240, 235, 0.72);
+  font-size: 16px;
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 999px;
+  padding: 15px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.3s var(--ease), color 0.3s ease, transform 0.3s var(--ease);
+}
+
+.cta-pill:hover {
+  background: var(--accent);
+  color: var(--dark);
+  transform: translateY(-2px);
+}
+
+.cta-pill span { font-weight: 400; }
+
+.cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(241, 240, 235, 0.32);
+  border-radius: 999px;
+  padding: 14px 26px;
+  font-size: 14px;
+  color: rgba(241, 240, 235, 0.85);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.cta-ghost:hover {
+  border-color: rgba(241, 240, 235, 0.7);
+  background: rgba(241, 240, 235, 0.07);
+}
+
+.contact-note {
+  margin: 24px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: #92928b;
+}
+
+.contact-card {
+  border: 1px solid rgba(241, 240, 235, 0.16);
+  border-radius: 14px;
+  background: rgba(241, 240, 235, 0.05);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 8px clamp(18px, 2.4vw, 28px);
+}
+
+.contact-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 0;
+}
+
+.contact-row + .contact-row {
+  border-top: 1px solid rgba(241, 240, 235, 0.14);
+}
+
+.contact-row span {
+  font-family: var(--font-mono);
+  font-size: var(--label-size-sm);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.contact-row a,
+.contact-row strong {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--light);
+}
+
+.contact-row a {
+  text-decoration: underline;
+  text-decoration-color: rgba(232, 131, 107, 0.6);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s ease, color 0.3s ease;
+}
+
+.contact-row a:hover { color: var(--accent); }
 
 /* ---------- Colophon footer ----------
    Editorial 3-column colophon:
    Brand on the left, navigation perfectly centered, social links on the right.
-   Bottom tier: Full-span hairline with copyright & studio edition metadata. */
+   Bottom tier: Full-span hairline with copyright & studio edition metadata.
+   .footer-cta is a tablet + mobile closing line above the brand;
+   desktop keeps the 3-column colophon clean. */
 footer {
   border-top: 1px solid var(--line);
-  padding: 40px 5vw 28px;
+  padding: clamp(28px, 4vw, 40px) 5vw clamp(20px, 3vw, 28px);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: clamp(20px, 3vw, 28px);
 }
+
+.footer-cta {
+  display: none;
+  font-family: var(--font-display);
+  letter-spacing: -.015em;
+  line-height: 1.05;
+  transition: color .3s ease;
+}
+
+.footer-cta:hover { color: var(--accent); }
+
+.footer-cta span { font-size: .8em; }
 
 .footer-main {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 24px;
+  gap: clamp(16px, 2.5vw, 24px);
 }
 
 .footer-brand {
@@ -917,9 +1078,41 @@ footer {
 
 
   .about-body { grid-template-columns: 1fr; gap: 35px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 35px; }
   .portrait { max-width: 340px; margin-bottom: 0; }
   .index-list { grid-template-columns: 1fr; }
   .index-list li + li { border-left: 0; padding-left: 0; border-top: 1px solid rgba(241,240,235,.16); }
+
+  /* Tablet footer: 2-column colophon — brand + socials up top,
+     CTA + nav stacked below, so nothing crowds at 768px. */
+  footer { gap: 20px; }
+
+  .footer-cta {
+    display: block;
+    font-size: clamp(24px, 4.5vw, 34px);
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--text);
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    row-gap: 18px;
+  }
+
+  .footer-brand { grid-column: 1; }
+
+  .footer-social { grid-column: 2; justify-self: end; align-self: start; }
+
+  .footer-nav {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    justify-content: flex-start;
+    gap: 10px 24px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
 
 }
 
@@ -961,6 +1154,7 @@ footer {
     transform: translateY(-7px) rotate(-45deg);
   }
 
+  /* ---------- Mobile menu: editorial index ---------- */
   .mobile-menu {
     display: flex;
     position: fixed;
@@ -968,15 +1162,58 @@ footer {
     background: var(--bg);
     z-index: 19;
     flex-direction: column;
-    padding: 30px 6vw;
-    gap: 22px;
+    padding: 18px 6vw 28px;
+    gap: 0;
     transform: translateY(-120%);
     transition: transform .4s var(--ease);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--text);
   }
 
   .mobile-menu.open { transform: translateY(0); }
-  .mobile-menu a { font-family: var(--font-display); font-size: 34px; }
+
+  .menu-kicker {
+    margin: 0;
+    padding: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: var(--label-size);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mobile-menu a:not(.menu-mail) {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    font-family: var(--font-display);
+    font-size: 34px;
+    letter-spacing: -.015em;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    transition: color .3s ease, padding-left .3s var(--ease);
+  }
+
+  .mobile-menu a:not(.menu-mail) span {
+    font-family: var(--font-mono);
+    font-size: var(--label-size-sm);
+    letter-spacing: var(--track-label);
+    color: var(--accent);
+  }
+
+  .mobile-menu a:not(.menu-mail):hover { color: var(--accent); padding-left: 6px; }
+
+  .menu-mail {
+    display: inline-block;
+    margin-top: 18px;
+    width: fit-content;
+    border-bottom: 1px solid var(--text);
+    padding-bottom: 6px;
+    font-size: 14px;
+    transition: color .3s ease, border-color .3s ease;
+  }
+
+  .menu-mail:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
   .hero {
     min-height: 88vh;
@@ -1029,26 +1266,37 @@ footer {
 
   .gallery-item.off { margin-top: 0; }
 
-  .about,
-  .contact { padding: 14vw 6vw; }
+  .about { padding: 14vw 6vw; }
 
-  .contact { min-height: 65vh; }
+  .contact { padding: 12vw 4vw; }
+  .contact-inner { padding: 28px 20px; border-radius: 16px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 28px; }
+  .contact h2 { font-size: clamp(42px, 13vw, 64px); }
+  .contact-ghost { font-size: clamp(90px, 32vw, 160px); }
 
   footer {
     padding: 32px 6vw 24px;
     gap: 22px;
   }
 
+  /* Phone footer: single-column closer — CTA rule, brand, nav, socials. */
+  .footer-cta {
+    font-size: clamp(26px, 7vw, 34px);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--text);
+  }
+
   .footer-main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 18px;
+    gap: 0;
   }
 
   .footer-brand {
     justify-self: auto;
     gap: 5px;
+    padding: 18px 0;
   }
 
   .footer-brand .logo {
@@ -1063,12 +1311,17 @@ footer {
     justify-self: auto;
     justify-content: flex-start;
     gap: 8px 22px;
+    width: 100%;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   .footer-social {
     justify-self: auto;
     gap: 16px;
     margin-left: -4px;
+    padding-top: 18px;
   }
 
   .footer-meta {

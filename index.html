@@ -53,10 +53,12 @@
   </header>
 
   <div class="mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="#about">About</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#contact">Let’s Talk</a>
+    <p class="menu-kicker">Menu — Ncourage Studios</p>
+    <a href="index.html"><span>01</span>Home</a>
+    <a href="#about"><span>02</span>About</a>
+    <a href="#gallery"><span>03</span>Gallery</a>
+    <a href="#contact"><span>04</span>Let’s Talk</a>
+    <a class="menu-mail" href="mailto:hello@ncouragestudios.com">hello@ncouragestudios.com <span aria-hidden="true">↗</span></a>
   </div>
 
   <main id="main">
@@ -215,14 +217,39 @@
     </section>
 
     <section class="contact" id="contact">
-      <p class="eyebrow" data-reveal>Have a story to tell?</p>
-      <h2 data-reveal data-delay="1">Let’s make<br><em>something memorable.</em></h2>
-      <a class="cta" href="mailto:hello@ncouragestudios.com" data-reveal data-delay="2">Let’s Talk <span>↗</span></a>
-      <p class="contact-note" data-reveal data-delay="3">Based in Benin City, working across Nigeria.</p>
+      <span class="contact-ghost" aria-hidden="true">Talk</span>
+      <div class="contact-inner">
+        <div class="contact-top" data-reveal>
+          <p class="eyebrow">Have a story to tell?</p>
+          <p class="availability">Bookings open — 2026</p>
+        </div>
+        <h2 data-reveal data-delay="1">Let’s make<br><em>something memorable.</em></h2>
+        <div class="contact-grid">
+          <div class="contact-left" data-reveal data-delay="2">
+            <p class="contact-copy">Portraits, weddings, editorials and quiet in-between moments — tell me what you’re dreaming of and we’ll shape the shoot around it.</p>
+            <div class="contact-actions">
+              <a class="cta-pill" href="mailto:hello@ncouragestudios.com">Let’s Talk <span aria-hidden="true">↗</span></a>
+              <a class="cta-ghost" href="#gallery">View work</a>
+            </div>
+            <p class="contact-note">Replies within 48hrs</p>
+          </div>
+          <aside class="contact-card" data-reveal data-delay="3" aria-label="Booking details">
+            <div class="contact-row">
+              <span>Email</span>
+              <a href="mailto:hello@ncouragestudios.com">hello@ncouragestudios.com</a>
+            </div>
+            <div class="contact-row">
+              <span>Hours</span>
+              <strong>Mon – Sat · 9am – 6pm WAT</strong>
+            </div>
+          </aside>
+        </div>
+      </div>
     </section>
   </main>
 
   <footer>
+    
     <div class="footer-main">
       <div class="footer-brand">
         <!-- Footer sits on the light page colour, so only the black lockup appears. -->
@@ -239,10 +266,7 @@
       
       </div>
 
-        <!-- Reference layout: the three page anchors, then the social marks.
-         Icons are inline SVG on a shared square grid (Simple Icons for Instagram,
-         YouTube and TikTok; Font Awesome CC BY 4.0 for the LinkedIn glyph), so
-         nothing extra is fetched. Replace the # hrefs with the real profile URLs. -->
+        
     <nav class="footer-nav" aria-label="Footer navigation">
       <a href="index.html">Home</a>
       <a href="#about">About</a>
