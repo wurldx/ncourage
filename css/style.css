@@ -33,6 +33,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  overflow-x: clip; /* ghost display type must never cause sideways scroll */
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-text);
@@ -813,6 +814,7 @@ em { font-style: italic; }
 }
 
 .contact-row a {
+  overflow-wrap: anywhere;
   text-decoration: underline;
   text-decoration-color: rgba(232, 131, 107, 0.6);
   text-underline-offset: 4px;
@@ -1083,6 +1085,111 @@ footer {
   .index-list { grid-template-columns: 1fr; }
   .index-list li + li { border-left: 0; padding-left: 0; border-top: 1px solid rgba(241,240,235,.16); }
 
+  /* Tablet header: the hamburger takes over at 900px — five links plus
+     the lockup crowd a 768px bar, so the mobile index serves tablet too. */
+  .site-header { height: 72px; padding: 0 6vw; }
+  .site-header .logo { --logo-height: 32px; }
+  .desktop-nav { display: none; }
+
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 0;
+    background: none;
+    padding: 8px 0;
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    width: 25px;
+    height: 1px;
+    /* currentColor, so the lines follow the header: light over the hero,
+       dark once .scrolled is applied. */
+    background: currentColor;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+
+  /* Lines collapse onto the middle line's centre to form an X. */
+  .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+
+  .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ---------- Mobile menu: editorial index (tablet + phone) ---------- */
+  .mobile-menu {
+    display: flex;
+    position: fixed;
+    inset: 72px 0 auto;
+    max-height: calc(100vh - 72px);
+    max-height: calc(100dvh - 72px);
+    overflow-y: auto;
+    background: var(--bg);
+    z-index: 19;
+    flex-direction: column;
+    padding: 18px 6vw 28px;
+    gap: 0;
+    transform: translateY(-120%);
+    transition: transform .4s var(--ease);
+    border-bottom: 1px solid var(--text);
+  }
+
+  .mobile-menu.open { transform: translateY(0); }
+
+  .menu-kicker {
+    margin: 0;
+    padding: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: var(--label-size);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mobile-menu a:not(.menu-mail) {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    font-family: var(--font-display);
+    font-size: clamp(28px, 8vw, 34px);
+    letter-spacing: -.015em;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    transition: color .3s ease, padding-left .3s var(--ease);
+  }
+
+  .mobile-menu a:not(.menu-mail) span {
+    font-family: var(--font-mono);
+    font-size: var(--label-size-sm);
+    letter-spacing: var(--track-label);
+    color: var(--accent);
+  }
+
+  .mobile-menu a:not(.menu-mail):hover { color: var(--accent); padding-left: 6px; }
+
+  .menu-mail {
+    display: inline-block;
+    margin-top: 18px;
+    width: fit-content;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--text);
+    padding-bottom: 6px;
+    font-size: 14px;
+    transition: color .3s ease, border-color .3s ease;
+  }
+
+  .menu-mail:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* Sticky filter bar tracks the shorter 72px header from here down. */
+  .gallery-toolbar { top: 72px; }
+
   /* Tablet footer: 2-column colophon — brand + socials up top,
      CTA + nav stacked below, so nothing crowds at 768px. */
   footer { gap: 20px; }
@@ -1117,106 +1224,12 @@ footer {
 }
 
 @media (max-width: 640px) {
-  .site-header { height: 72px; padding: 0 6vw; }
-
-  /* The bar is shorter here, so the mark shrinks with it. */
-  .site-header .logo { --logo-height: 32px; }
-
-  .desktop-nav { display: none; }
-
-  .menu-toggle {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    border: 0;
-    background: none;
-    padding: 8px 0;
-    cursor: pointer;
-  }
-
-  .menu-toggle span {
-    width: 25px;
-    height: 1px;
-    /* currentColor, so the lines follow the header: light over the hero,
-       dark once .scrolled is applied. */
-    background: currentColor;
-    transition: transform .3s ease, opacity .3s ease;
-  }
-
-  /* Lines collapse onto the middle line's centre to form an X. */
-  .menu-toggle[aria-expanded="true"] span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-
-  .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-
-  .menu-toggle[aria-expanded="true"] span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
-
-  /* ---------- Mobile menu: editorial index ---------- */
-  .mobile-menu {
-    display: flex;
-    position: fixed;
-    inset: 72px 0 auto;
-    background: var(--bg);
-    z-index: 19;
-    flex-direction: column;
-    padding: 18px 6vw 28px;
-    gap: 0;
-    transform: translateY(-120%);
-    transition: transform .4s var(--ease);
-    border-bottom: 1px solid var(--text);
-  }
-
-  .mobile-menu.open { transform: translateY(0); }
-
-  .menu-kicker {
-    margin: 0;
-    padding: 0 0 14px;
-    font-family: var(--font-mono);
-    font-size: var(--label-size);
-    letter-spacing: var(--track-label);
-    text-transform: uppercase;
-    color: var(--muted);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .mobile-menu a:not(.menu-mail) {
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    font-family: var(--font-display);
-    font-size: 34px;
-    letter-spacing: -.015em;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--line);
-    transition: color .3s ease, padding-left .3s var(--ease);
-  }
-
-  .mobile-menu a:not(.menu-mail) span {
-    font-family: var(--font-mono);
-    font-size: var(--label-size-sm);
-    letter-spacing: var(--track-label);
-    color: var(--accent);
-  }
-
-  .mobile-menu a:not(.menu-mail):hover { color: var(--accent); padding-left: 6px; }
-
-  .menu-mail {
-    display: inline-block;
-    margin-top: 18px;
-    width: fit-content;
-    border-bottom: 1px solid var(--text);
-    padding-bottom: 6px;
-    font-size: 14px;
-    transition: color .3s ease, border-color .3s ease;
-  }
-
-  .menu-mail:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  /* Header/menu/toolbar already switch at 900px above; phones only tune
+     the page sections, so nothing here is duplicated. */
 
   .hero {
     min-height: 88vh;
+    min-height: 88dvh;
     padding: 20vh 6vw 5vh;
   }
 
@@ -1246,12 +1259,13 @@ footer {
 
 
   .gallery-toolbar {
-    top: 72px;
     align-items: flex-start;
     flex-direction: column;
     padding: 14px 0;
     gap: 14px;
   }
+
+  .count { white-space: normal; }
 
   .gallery {
     grid-template-columns: 1fr;
@@ -1328,9 +1342,14 @@ footer {
     justify-content: center; text-align: center; padding-top: 16px;
   }
 
+  /* Phone lightbox: caption stacks, arrows dock to the bottom corners
+     so thumbs never cover the plate on 360px screens. */
   .lightbox { padding: 7vh 5vw; }
   .lightbox-count { top: 18px; }
   .lightbox-content { width: 100%; }
+  .lightbox-caption { flex-direction: column; gap: 8px; }
+  .lightbox-prev,
+  .lightbox-next { top: auto; bottom: 12px; transform: none; }
   .lightbox-prev { left: 0; }
   .lightbox-next { right: 0; }
 }
