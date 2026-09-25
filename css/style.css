@@ -1,0 +1,1098 @@
+﻿/* Ncourage Studios — editorial print-magazine redesign.
+   Type: Fraunces (display) . DM Sans (text) . DM Mono (labels) . Montserrat (wordmark).
+   Grid: asymmetric 12-column plate grid with staggered offsets. */
+
+:root {
+  --bg: #f3f2ee;
+  --surface: #e8e7e2;
+  --text: #181816;
+  --muted: #5f5e58;
+  --line: #d4d2ca;
+  --dark: #171715;
+  --accent: #a2402d;
+  --light: #f1f0eb;
+  --ease: cubic-bezier(.2,.75,.25,1);
+  --nav-fade: .7s;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-text: "DM Sans", system-ui, sans-serif;
+  --font-logo: "Montserrat", "DM Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Micro-label scale: one tracking step for the functional labels and one for
+     the two that behave like display type, plus a two-step size floor. Every
+     uppercase mono label draws from these, so they read as one system rather
+     than a dozen local decisions. */
+  --track-label: .14em;
+  --track-wide: .22em;
+  --label-size: 11px;
+  --label-size-sm: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+body.no-scroll { overflow: hidden; }
+
+a { color: inherit; text-decoration: none; }
+
+button { font: inherit; color: inherit; }
+
+ul { margin: 0; padding: 0; list-style: none; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Selection takes the brand accent: the browser default blue is the one colour
+   on the page that is not ours. */
+::selection {
+  background: rgba(162,64,45,.16);
+  text-shadow: none;
+}
+
+/* Light type on dark surfaces gains a little weight under default antialiasing,
+   so ask for grayscale there; the header returns to the default as soon as the
+   bar turns solid and its type flips to dark-on-light. */
+.hero,
+.about,
+.lightbox { -webkit-font-smoothing: antialiased; }
+
+.site-header:not(.scrolled):not(.menu-open) { -webkit-font-smoothing: antialiased; }
+
+/* Break control: the display headings are hand-broken with <br>, so balance only
+   has work to do where a heading seeks its own wrap; body copy uses pretty to
+   keep a single word off the last line. */
+h1,
+h2 { text-wrap: balance; }
+
+p { text-wrap: pretty; }
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 300;
+  background: var(--text);
+  color: var(--light);
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.skip-link:focus { top: 14px; }
+
+/* ---------- Masthead header ---------- */
+/* Over the hero the header is fully transparent with light text; once the
+   photo scrolls out from behind it the bar cross-fades back to the page
+   colour (--nav-fade in :root controls how slowly that happens). */
+.site-header {
+  height: 88px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: transparent;
+  color: #f1f0eb;
+  transition:
+    background-color var(--nav-fade) ease,
+    border-color var(--nav-fade) ease,
+    color var(--nav-fade) ease;
+}
+
+/* .menu-open mirrors this while the mobile menu is open. */
+.site-header.scrolled,
+.site-header.menu-open {
+  background: var(--bg);
+  border-bottom-color: var(--line);
+  color: var(--text);
+}
+
+/* Issue line: the magazine masthead detail, optically centred in the bar. */
+.issue-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: .7;
+  white-space: nowrap;
+}
+
+/* Logo lockup: the mark leads, then the NCOURAGE STUDIOS wordmark in live text --
+   text rather than a third exported image, so the name inherits the bar's colour
+   without needing a white/black pair of its own.
+   Both mark WebPs share one grid cell so the masthead can cross-fade them on the
+   same --nav-fade as the rest of the bar: white over the hero, black once solid.
+   Everything below is sized from --logo-height, so the 640px breakpoint only has
+   to change that one value. */
+.logo {
+  --logo-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--logo-height) * .34);
+}
+
+.logo-stack { display: inline-grid; }
+
+.logo-mark {
+  grid-area: 1 / 1;
+  display: block;
+  height: var(--logo-height);
+  width: auto;
+  transition: opacity var(--nav-fade) ease;
+}
+
+/* Proportions lifted from the master artwork: cap heights are .335 and .175 of
+   the symbol height, the two lines sit .09 apart, and STUDIOS is tracked out to
+   the artwork's near-full line width. Montserrat 500 and 800 are the weights
+   that match its stroke-to-cap ratio (.151 and .267). */
+.logo-wordmark {
+  display: grid;
+  font-family: var(--font-logo);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.logo-wordmark-main {
+  font-size: calc(var(--logo-height) * .4676);
+  font-weight: 500;
+  letter-spacing: -.012em;
+}
+
+/* The negative right margin swallows STUDIOS's trailing 1em of tracking, so the
+   wordmark box ends where its ink does instead of on invisible space. */
+.logo-wordmark-sub {
+  margin: calc(var(--logo-height) * .03) -1em 0 0;
+  font-size: calc(var(--logo-height) * .2447);
+  font-weight: 800;
+  letter-spacing: 1em;
+}
+
+.site-header .logo-mark--dark { opacity: 0; }
+
+.site-header.scrolled .logo-mark--light,
+.site-header.menu-open .logo-mark--light { opacity: 0; }
+
+.site-header.scrolled .logo-mark--dark,
+.site-header.menu-open .logo-mark--dark { opacity: 1; }
+
+.desktop-nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.desktop-nav a {
+  position: relative;
+  font-size: 15px;
+  color: rgba(241,240,235,.72);
+  transition: color var(--nav-fade) ease;
+}
+
+.desktop-nav a:hover,
+.desktop-nav a.active { color: #f1f0eb; }
+
+.desktop-nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1px;
+  background: #f1f0eb;
+  transition: background-color var(--nav-fade) ease;
+}
+
+/* Past the hero (or with the mobile menu open) the links return to their
+   normal dark-on-light palette. */
+.site-header.scrolled .desktop-nav a,
+.site-header.menu-open .desktop-nav a { color: var(--muted); }
+
+.site-header.scrolled .desktop-nav a:hover,
+.site-header.scrolled .desktop-nav a.active,
+.site-header.menu-open .desktop-nav a:hover,
+.site-header.menu-open .desktop-nav a.active { color: var(--text); }
+
+.site-header.scrolled .desktop-nav a.active::after,
+.site-header.menu-open .desktop-nav a.active::after { background: var(--text); }
+
+.menu-toggle,
+.mobile-menu { display: none; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #0c141e; /* the photograph's own backdrop, so edges blend */
+  color: #f1f0eb;
+  min-height: 88vh;
+  /* The bottom pad is deliberately small: the whole text block is anchored to
+     the hero's lower edge, so tightening it is what pushes the headline's
+     ascenders clear of the left model's chin. */
+  padding: 18vh 8vw 5vh;
+  display: flex;
+  flex-direction: column;
+  /* Bottom-aligned: the frame's lower-left is a smooth forearm and shoulder,
+     which a scrim can darken without costing the photograph anything. */
+  justify-content: flex-end;
+}
+
+.hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% center;
+}
+
+/* Scrim keeps the headline legible without flattening the picture: the
+   gradient runs diagonally, so its darkest corner sits under the copy in
+   the bottom-left while both models' faces stay open and lit. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(115deg,
+    rgba(12,20,30,.94) 0%,
+    rgba(12,20,30,.84) 26%,
+    rgba(12,20,30,.55) 48%,
+    rgba(12,20,30,.22) 72%,
+    rgba(12,20,30,0) 100%);
+}
+
+.hero-content { text-shadow: 0 1px 22px rgba(12,20,30,.5); }
+
+.eyebrow {
+  margin: 0 0 28px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+.hero h1,
+.section-title,
+.about h2,
+.contact h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  letter-spacing: -.02em;
+}
+
+em { font-style: italic; }
+
+.hero .eyebrow {
+  margin-bottom: 18px;
+  color: rgba(241,240,235,.66);
+}
+
+/* Two size terms, because the photograph is height-fit (so both models' faces
+   track the viewport height, not its width): the width term keeps the first
+   line's end short of the left model's chin, while the height term stops the
+   fixed copy and margins from pushing the headline's ascenders up into her
+   chin on short screens. */
+.hero h1 {
+  font-size: clamp(34px, min(5.4vw, calc(13vh - 51px)), 88px);
+  line-height: .92;
+  letter-spacing: -.025em;
+  max-width: 1000px;
+}
+
+.hero-copy {
+  max-width: 360px;
+  margin: 24px 0 0;
+  color: rgba(241,240,235,.76);
+  font-size: 14px;
+}
+
+/* Bottom-right mono rail: disciplines plus scroll cue. Positioned over the
+   photo's quiet right edge so the copy block's tuned geometry is untouched. */
+.hero-rail {
+  position: absolute;
+  right: 8vw;
+  bottom: 4.4vh;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: rgba(241,240,235,.78);
+  text-shadow: 0 1px 14px rgba(12,20,30,.65);
+}
+
+.hero-disciplines { display: flex; }
+
+.hero-disciplines li + li::before {
+  content: "·";
+  margin: 0 12px;
+  opacity: .5;
+}
+
+.scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f1f0eb;
+  transition: color .3s ease;
+}
+
+.scroll-cue:hover { color: #fff; }
+
+.scroll-cue span {
+  display: inline-block;
+  transition: transform .3s var(--ease);
+}
+
+.scroll-cue:hover span { transform: translateY(4px); }
+
+/* ---------- Section heads ---------- */
+.gallery-section { padding: clamp(56px, 8vw, 120px) 5vw 13vw; }
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: clamp(14px, 2vw, 28px);
+  border-top: 1px solid var(--line);
+  padding: 24px 0;
+}
+
+.section-title {
+  font-size: clamp(45px, 5.4vw, 78px);
+  line-height: .95;
+}
+
+/* Sticky index bar: filters stay reachable while scrolling the grid. */
+.gallery-toolbar {
+  position: sticky;
+  top: 88px;
+  z-index: 6;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter-list {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.filter {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 0 0 3px;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  transition: color .25s ease, border-color .25s ease;
+}
+
+.filter sup {
+  font-family: var(--font-mono);
+  font-size: var(--label-size-sm);
+}
+
+.filter:hover { color: var(--text); }
+
+.filter.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.count {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Plate grid ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: clamp(16px, 2vw, 28px);
+  row-gap: clamp(44px, 5.5vw, 88px);
+  margin-top: clamp(40px, 5vw, 72px);
+}
+
+.gallery-item {
+  grid-column: span 4;
+  align-self: start;
+  animation: reveal .7s var(--ease) both;
+}
+
+.gallery-item.s5 { grid-column: span 5; }
+.gallery-item.s7 { grid-column: span 7; }
+.gallery-item.s8 { grid-column: span 8; }
+.gallery-item.off { margin-top: clamp(28px, 4vw, 76px); }
+
+.gallery-item.is-hidden { display: none; }
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* ---------- Plates ---------- */
+.image-card {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.placeholder,
+.lightbox-placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / .72;
+  background: linear-gradient(160deg, #deddd8 0%, #d3d2cc 55%, #c9c8c1 100%);
+  overflow: hidden;
+}
+
+.placeholder.tall { aspect-ratio: 1 / 1.28; }
+
+/* Mono plate label, top-left — magazine caption detail. */
+.placeholder::before {
+  content: "Plate";
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: var(--label-size-sm);
+  text-transform: uppercase;
+  color: rgba(24,24,22,.62);
+}
+
+.placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, rgba(255,255,255,.10), rgba(0,0,0,.06));
+  transition: transform .8s var(--ease);
+}
+
+/* Ghosted display numeral, bottom-left. */
+.placeholder span {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  bottom: 6px;
+  color: rgba(24,24,22,.26);
+  font-family: var(--font-display);
+  font-size: clamp(56px, 6vw, 112px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+/* Real photographs drop straight in (README replacement pattern). */
+.placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-card:hover .placeholder::after { transform: scale(1.08); }
+
+.image-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: 13px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.image-meta span:first-child {
+  color: var(--text);
+  transition: color .3s ease;
+}
+
+.image-meta span:last-child {
+  font-family: var(--font-mono);
+  font-size: var(--label-size-sm);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.image-card:hover .image-meta span:first-child { color: var(--accent); }
+
+/* ---------- About (dark band) ---------- */
+.about {
+  background: var(--dark);
+  color: #f1f0eb;
+  --accent: #e8836b; /* focus rings read on dark */
+  padding: clamp(48px, 6vw, 90px) 8vw;
+}
+
+.about .eyebrow { color: #92928b; }
+
+.about-body {
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.5fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: end;
+  margin-top: clamp(20px, 2.5vw, 36px);
+}
+
+.about h2 {
+  font-size: clamp(34px, 4.4vw, 60px);
+  line-height: .98;
+  letter-spacing: -.025em;
+}
+
+.about-copy {
+  max-width: 58ch;
+  margin: clamp(16px, 2vw, 24px) 0 0;
+  color: #a9a8a1;
+  font-size: 16px;
+}
+
+/* Numbered services index — the footer tagline, made editorial. */
+.index-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: clamp(28px, 3vw, 48px);
+  border-top: 1px solid rgba(241,240,235,.16);
+  border-bottom: 1px solid rgba(241,240,235,.16);
+}
+
+.index-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 17px 0;
+  font-size: 14px;
+  letter-spacing: .02em;
+}
+
+.index-list li + li {
+  border-left: 1px solid rgba(241,240,235,.16);
+  padding-left: clamp(18px, 2.4vw, 32px);
+}
+
+.index-list li span {
+  font-family: var(--font-mono);
+  font-size: var(--label-size-sm);
+  letter-spacing: var(--track-label);
+  color: var(--accent);
+}
+
+/* Portrait plate — first column of the photographer profile spread. */
+.portrait { margin: 0 0 -25px; }
+
+.portrait-plate { aspect-ratio: 4 / 5; }
+
+.portrait-plate::before { content: "Portrait"; }
+
+/* 2:3 source in a 4:5 frame: anchor near the top to keep the face. */
+.portrait-plate img { object-position: center 15%; }
+
+.portrait figcaption {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: var(--label-size-sm);
+  text-transform: uppercase;
+  color: #92928b;
+}
+
+/* ---------- Contact ---------- */
+.contact {
+  min-height: 75vh;
+  padding: clamp(72px, 12vw, 170px) 8vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact h2 {
+  font-size: clamp(54px, 9vw, 135px);
+  line-height: .9;
+  letter-spacing: -.03em;
+}
+
+.cta {
+  margin-top: clamp(40px, 5vw, 65px);
+  width: fit-content;
+  border-bottom: 1px solid var(--text);
+  padding-bottom: 9px;
+  font-size: 15px;
+  transition: padding .3s var(--ease), color .3s ease;
+}
+
+.cta:hover {
+  padding-right: 15px;
+  color: var(--accent);
+}
+
+.cta span { margin-left: 20px; }
+
+.contact-note {
+  margin: 26px 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Colophon footer ----------
+   Editorial 3-column colophon:
+   Brand on the left, navigation perfectly centered, social links on the right.
+   Bottom tier: Full-span hairline with copyright & studio edition metadata. */
+footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 5vw 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-brand {
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.footer-brand .logo {
+  --logo-height: 28px;
+  color: var(--text);
+}
+
+.footer-tagline {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 7px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .75;
+}
+
+/* The anchors read as one tracked line, geometric like the wordmark, perfectly centered */
+.footer-nav {
+  justify-self: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.footer-nav a {
+  display: inline-block;
+  padding: 4px 0;
+  font-family: var(--font-logo);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  transition: color .3s var(--ease);
+}
+
+.footer-nav a:hover { color: var(--accent); }
+
+/* Each mark sits on the same square grid, aligned to the right */
+.footer-social {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  color: var(--text);
+  transition: color .3s var(--ease), transform .3s var(--ease);
+}
+
+.footer-social a:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.footer-social svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Sub-colophon bottom bar */
+.footer-meta {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center; text-align: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-meta p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.footer-meta .copyright {
+  font-family: var(--font-text);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,15,14,.96);
+  --accent: #e8836b;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vh 8vw;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+
+.lightbox.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-count {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  color: #8e8e89;
+}
+
+.lightbox-content { width: min(900px, 80vw); }
+
+.lightbox-placeholder { aspect-ratio: 1.5 / 1; }
+
+.lightbox-placeholder span {
+  position: absolute;
+  left: 22px;
+  bottom: 10px;
+  color: rgba(24,24,22,.26);
+  font-family: var(--font-display);
+  font-size: clamp(64px, 8vw, 130px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.lightbox-caption {
+  display: flex;
+  justify-content: space-between;
+  color: #eee;
+  padding-top: 17px;
+  font-size: 11px;
+}
+
+.lightbox-caption strong,
+.lightbox-caption span { display: block; }
+
+.lightbox-caption strong { font-size: 13px; font-weight: 500; }
+.lightbox-caption span { color: #8e8e89; margin-top: 4px; }
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  border: 0;
+  background: none;
+}
+
+.lightbox-close {
+  top: 24px;
+  right: 35px;
+  font-size: 35px;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 25px;
+  padding: 20px;
+  color: #aaa;
+  transition: color .2s ease;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover { color: #fff; }
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+/* ---------- Scroll reveal ---------- */
+/* Gated behind html.js (set inline in <head>): without JS the page simply
+   renders, and reduced-motion users get the forced-visible override below. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.js [data-delay="1"] { transition-delay: .12s; }
+.js [data-delay="2"] { transition-delay: .24s; }
+.js [data-delay="3"] { transition-delay: .36s; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .issue-line { display: none; }
+  .hero-disciplines { display: none; } /* scroll cue stays */
+}
+
+@media (max-width: 900px) {
+  .gallery { grid-template-columns: repeat(6, 1fr); }
+  .gallery-item { grid-column: span 3; }
+  .gallery-item.s5,
+  .gallery-item.s7,
+  .gallery-item.s8 { grid-column: span 6; } /* feature plates go full-width */
+  .gallery-item.off { margin-top: clamp(16px, 3vw, 40px); }
+
+
+  .about-body { grid-template-columns: 1fr; gap: 35px; }
+  .portrait { max-width: 340px; margin-bottom: 0; }
+  .index-list { grid-template-columns: 1fr; }
+  .index-list li + li { border-left: 0; padding-left: 0; border-top: 1px solid rgba(241,240,235,.16); }
+
+}
+
+@media (max-width: 640px) {
+  .site-header { height: 72px; padding: 0 6vw; }
+
+  /* The bar is shorter here, so the mark shrinks with it. */
+  .site-header .logo { --logo-height: 32px; }
+
+  .desktop-nav { display: none; }
+
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 0;
+    background: none;
+    padding: 8px 0;
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    width: 25px;
+    height: 1px;
+    /* currentColor, so the lines follow the header: light over the hero,
+       dark once .scrolled is applied. */
+    background: currentColor;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+
+  /* Lines collapse onto the middle line's centre to form an X. */
+  .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+
+  .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .mobile-menu {
+    display: flex;
+    position: fixed;
+    inset: 72px 0 auto;
+    background: var(--bg);
+    z-index: 19;
+    flex-direction: column;
+    padding: 30px 6vw;
+    gap: 22px;
+    transform: translateY(-120%);
+    transition: transform .4s var(--ease);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu a { font-family: var(--font-display); font-size: 34px; }
+
+  .hero {
+    min-height: 88vh;
+    padding: 20vh 6vw 5vh;
+  }
+
+  /* The narrow crop frames both faces at 50%; the scrim is heavier here
+     because brighter skin tones move in behind the copy. */
+  .hero-image { object-position: 50% center; }
+
+  .hero::after {
+    background: linear-gradient(115deg,
+      rgba(12,20,30,.96) 0%,
+      rgba(12,20,30,.88) 30%,
+      rgba(12,20,30,.62) 55%,
+      rgba(12,20,30,.28) 78%,
+      rgba(12,20,30,0) 100%);
+  }
+
+  /* Same two-term sizing as desktop: the faces are 1.5x larger in this crop,
+     so the height term matters here too on short viewports. */
+  .hero h1 {
+    font-size: clamp(34px, min(10.5vw, calc(13vh - 51px)), 56px);
+    max-width: 320px;
+  }
+  .hero-copy { margin: 18px 0 0; }
+  .hero-rail { display: none; }
+
+  .gallery-section { padding: 56px 6vw 22vw; }
+
+
+  .gallery-toolbar {
+    top: 72px;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 14px 0;
+    gap: 14px;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
+    row-gap: 42px;
+    margin-top: 32px;
+  }
+
+  .gallery-item,
+  .gallery-item.s5,
+  .gallery-item.s7,
+  .gallery-item.s8 { grid-column: span 1; }
+
+  .gallery-item.off { margin-top: 0; }
+
+  .about,
+  .contact { padding: 14vw 6vw; }
+
+  .contact { min-height: 65vh; }
+
+  footer {
+    padding: 32px 6vw 24px;
+    gap: 22px;
+  }
+
+  .footer-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .footer-brand {
+    justify-self: auto;
+    gap: 5px;
+  }
+
+  .footer-brand .logo {
+    --logo-height: 24px;
+  }
+
+  .footer-tagline {
+    font-size: 6.5px;
+  }
+
+  .footer-nav {
+    justify-self: auto;
+    justify-content: flex-start;
+    gap: 8px 22px;
+  }
+
+  .footer-social {
+    justify-self: auto;
+    gap: 16px;
+    margin-left: -4px;
+  }
+
+  .footer-meta {
+    justify-content: center; text-align: center; padding-top: 16px;
+  }
+
+  .lightbox { padding: 7vh 5vw; }
+  .lightbox-count { top: 18px; }
+  .lightbox-content { width: 100%; }
+  .lightbox-prev { left: 0; }
+  .lightbox-next { right: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

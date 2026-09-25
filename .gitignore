@@ -1,0 +1,4 @@
+# debug / preview artefacts - not part of site
+_v_*.png
+_footer_*.png
+_footer_preview.html
