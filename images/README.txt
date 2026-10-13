@@ -41,9 +41,10 @@ images/fashion, images/studio):
 
   <folder><n>.webp        master, full resolution, kept for re-exporting
                           (e.g. editorial1.webp, portraits7.webp)
-  <folder><n>-480.webp    grid card on phones           (quality 75)
-  <folder><n>-800.webp    grid card on desktop / retina (quality 78)
-  <folder><n>-1600.webp   lightbox plate                (quality 80)
+  <folder><n>-480.webp    grid card on phones             (quality 75)
+  <folder><n>-800.webp    grid card on desktop           (quality 78)
+  <folder><n>-1200.webp   feature plate / retina desktop (quality 80)
+  <folder><n>-1600.webp   lightbox plate                 (quality 80)
 
 The serial number follows the natural order of the file names each photo had
 before renaming. The 240-350px leftovers with hash-suffix names are old

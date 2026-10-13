@@ -731,8 +731,8 @@ em { font-style: italic; }
 .gallery {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: clamp(16px, 2vw, 28px);
-  row-gap: 24px;
+  column-gap: clamp(12px, 1.5vw, 20px);
+  row-gap: 16px;
   margin-top: clamp(40px, 5vw, 72px);
 }
 
@@ -757,9 +757,12 @@ em { font-style: italic; }
 }
 
 .gallery-item.s5 { grid-column: span 5; }
+/* Feature plates stop at half the grid: any wider and the photo outgrows
+   its sharpest export (-1200) on desktop and starts to read soft. */
+.gallery-item.s6 { grid-column: span 6; }
 .gallery-item.s7 { grid-column: span 7; }
 .gallery-item.s8 { grid-column: span 8; }
-.gallery-item.off { margin-top: clamp(28px, 4vw, 76px); }
+.gallery-item.off { margin-top: clamp(20px, 3vw, 56px); }
 
 .gallery-item.is-hidden { display: none; }
 
@@ -1722,6 +1725,7 @@ footer {
   .gallery { grid-template-columns: repeat(6, 1fr); }
   .gallery-item { grid-column: span 3; }
   .gallery-item.s5,
+  .gallery-item.s6,
   .gallery-item.s7,
   .gallery-item.s8 { grid-column: span 6; } /* feature plates go full-width */
   .gallery-item.off { margin-top: clamp(16px, 3vw, 40px); }
@@ -1983,6 +1987,7 @@ footer {
 
   .gallery-item,
   .gallery-item.s5,
+  .gallery-item.s6,
   .gallery-item.s7,
   .gallery-item.s8 { grid-column: span 1; }
 

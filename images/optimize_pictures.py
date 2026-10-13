@@ -7,9 +7,10 @@ The photographs live in per-category folders under images/. This script
          images/editorial/G24.<hash>.webp  ->  images/editorial/editorial2.webp
      (natural sort of the old name decides the serial order),
   2. exports the sizes the site serves next to each master:
-         <name>-480.webp    grid card on phones          (quality 75)
-         <name>-800.webp    grid card on desktop, retina (quality 78)
-         <name>-1600.webp   lightbox plate               (quality 80)
+         <name>-480.webp    grid card on phones            (quality 75)
+         <name>-800.webp    grid card on desktop           (quality 78)
+         <name>-1200.webp   feature plate / retina desktop (quality 80)
+         <name>-1600.webp   lightbox plate                 (quality 80)
   3. writes the gallery <article> markup for index.html to a snippet file.
 
 Masters are renamed in place and kept as the re-export source; the small
@@ -42,14 +43,24 @@ GROUPS = [
 ]
 
 # (width target, webp quality) per use on the site.
-SIZES = [(480, 75), (800, 78), (1600, 80)]
+SIZES = [(480, 75), (800, 78), (1200, 80), (1600, 80)]
 MIN_WIDTH = 1000  # anything smaller is a legacy placeholder thumbnail
 
 # Editorial rhythm for the plate grid, cycling like the original 12 plates:
-# feature spans, staggered starts, plain thirds in between.
-CLASS_CYCLE = ["s7 off", "s5 off", "", "off", "", "off", "", "s5", "s7", "", "off", "s8 off"]
+# feature spans, staggered starts, plain thirds in between. Features stop at
+# span 6 (half the grid) so a plate never outgrows its sharpest export.
+CLASS_CYCLE = ["s6 off", "s5 off", "", "off", "", "off", "", "s5", "s6", "", "off", "s6 off"]
 
-SIZES_ATTR = "(max-width: 640px) 92vw, (max-width: 900px) 46vw, 33vw"
+
+def sizes_for(classes: str) -> str:
+    """Intrinsic width the plate can occupy, with a small buffer so the
+    browser never under-selects a candidate and renders soft."""
+    tablet, desktop = "46vw", "33vw"  # plain thirds
+    if "s5" in classes:
+        tablet, desktop = "92vw", "40vw"
+    elif "s6" in classes:
+        tablet, desktop = "92vw", "47vw"
+    return f"(max-width: 640px) 92vw, (max-width: 900px) {tablet}, {desktop}"
 
 
 def natural_key(name: str):
@@ -86,7 +97,7 @@ def collect_group(folder: Path, slug: str, force: bool):
     """Rename the full-size photos of one folder, return [(serial, master, w, h)]."""
     renamed = []  # (serial, path) already carrying the numbered name
     pending = []  # paths of not-yet-renamed originals
-    export_re = re.compile(r"-(480|800|1600)$")  # our own responsive exports
+    export_re = re.compile(r"-(480|800|1200|1600)$")  # our own responsive exports
 
     for path in sorted(folder.glob("*.webp")):
         stem = path.stem
@@ -129,9 +140,9 @@ def build_snippet(items, snippet_path: Path):
         name = f"{slug}{serial}"
         rel = f"images/{folder}"
         src = f"{rel}/{name}-800.webp"
-        srcset = f"{rel}/{name}-480.webp 480w, {rel}/{name}-800.webp 800w"
-        full = f"{rel}/{name}-1600.webp"
-        for referenced in (src, f"{rel}/{name}-480.webp", full):
+        srcset = ", ".join(f"{rel}/{name}-{w}.webp {w}w" for w, _q in SIZES)
+        full = f"{rel}/{name}-{SIZES[-1][0]}.webp"
+        for referenced in [f"{rel}/{name}-{w}.webp" for w, _q in SIZES]:
             if not (ROOT / referenced).is_file():
                 sys.exit(f"missing export: {referenced}")
         classes_attr = f' class="gallery-item {classes}"' if classes else ' class="gallery-item"'
@@ -142,7 +153,7 @@ def build_snippet(items, snippet_path: Path):
             <div class="placeholder">
               <img src="{src}"
                    srcset="{srcset}"
-                   sizes="{SIZES_ATTR}"
+                   sizes="{sizes_for(classes)}"
                    width="{w}" height="{h}"
                    alt="" loading="lazy" decoding="async"
                    data-full="{full}">
