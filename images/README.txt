@@ -36,5 +36,28 @@ untouched and the two files stay in exact register:
   magick "ncourage_studios_logo_transparent.webp" -crop 694x444+178+124 +repage -crop 694x257+0+0 +repage -trim +repage -strip -define webp:method=6 -quality 95 "images/ncouragelogo_black.webp"
   magick "images/ncouragelogo_black.webp" -channel RGB -evaluate set 100% +channel -strip -quality 92 -define webp:method=6 "images/ncouragelogo.webp"
 
-Gallery items still use the grey .placeholder divs in index.html; add the
-remaining photographs here as WebP when ready.
+Gallery photographs (images/editorial, images/event, images/event/portraits,
+images/fashion, images/studio):
+
+  <folder><n>.webp        master, full resolution, kept for re-exporting
+                          (e.g. editorial1.webp, portraits7.webp)
+  <folder><n>-480.webp    grid card on phones           (quality 75)
+  <folder><n>-800.webp    grid card on desktop / retina (quality 78)
+  <folder><n>-1600.webp   lightbox plate                (quality 80)
+
+The serial number follows the natural order of the file names each photo had
+before renaming. The 240-350px leftovers with hash-suffix names are old
+placeholder thumbnails; they are ignored by the pipeline and safe to delete.
+
+python images/optimize_pictures.py --apply
+
+renames any new full-size photos, exports the three serving sizes with
+ImageMagick 7 (stripped, never enlarged past the master), and rewrites the
+gallery items in index.html. Existing exports are kept unless --force is
+passed. The categories map to the gallery filters like this:
+
+  editorial        -> Editorial
+  event            -> Events
+  event/portraits  -> Portraits
+  fashion          -> Fashion
+  studio           -> Portraits

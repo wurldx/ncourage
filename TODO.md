@@ -7,7 +7,7 @@ Replace these before launch:
 - TODO: Replace `TODO_WHATSAPP_NUMBER` in both WhatsApp links with the country code and number, digits only.
 - TODO: Replace `YOUR_HANDLE` with the correct Instagram, YouTube, TikTok, and LinkedIn handles in the footer and LocalBusiness `sameAs` data.
 - TODO: Replace the About bio's `years of experience` and `client types` placeholders.
-- TODO: Add the 12 real gallery photographs; update each gallery item's title, category, location, and year to match its image.
+- TODO: Replace the generic gallery titles (`Editorial 1`, `Portrait 3`, …) and the `Benin City, Nigeria` location on each of the 28 plates with real titles, locations, and years (data attributes in index.html).
 - TODO: Review the About, hero, and 404 image alt text against the final supplied photographs.
 
 ## Mobile checklist

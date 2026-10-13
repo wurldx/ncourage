@@ -272,6 +272,17 @@ function updateLightbox() {
     const image = sourceImage.cloneNode(true);
     image.loading = "eager";
     image.classList.add("is-loaded");
+
+    // The grid serves the responsive card sizes; the lightbox plate is nearly
+    // full-viewport, so swap in the dedicated -1600 export when there is one.
+    const fullSource = sourceImage.dataset.full;
+    if (fullSource) {
+      image.removeAttribute("srcset");
+      image.removeAttribute("sizes");
+      image.removeAttribute("data-full");
+      image.src = fullSource;
+    }
+
     lightboxImage.append(image);
   } else {
     const numberLabel = document.createElement("span");
@@ -303,6 +314,12 @@ function preloadAdjacentImages() {
     const image = item.querySelector(".placeholder img");
     if (!image) return;
     const preload = new Image();
+    // Navigation shows the full-size plate, so prefetch that one, not the card.
+    const fullSource = image.dataset.full;
+    if (fullSource) {
+      preload.src = fullSource;
+      return;
+    }
     if (image.srcset) preload.srcset = image.srcset;
     preload.sizes = image.sizes;
     preload.src = image.currentSrc || image.src;
