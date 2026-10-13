@@ -2,6 +2,7 @@ const items = [...document.querySelectorAll(".gallery-item")];
 const filters = [...document.querySelectorAll(".filter")];
 const count = document.querySelector("#visibleCount");
 const gallery = document.querySelector("#galleryGrid");
+const gallerySection = document.querySelector("#gallery");
 let updateMasonry = () => {};
 
 items.forEach(item => {
@@ -81,6 +82,13 @@ filters.forEach(filter => {
     void document.body.offsetWidth;
     shown.forEach(item => item.classList.add("is-in"));
     requestAnimationFrame(updateMasonry);
+
+    // Hiding most of the grid shortens the page, which strands a deep
+    // scroll position past the gallery (on the contact plate). Re-anchor
+    // to the top of the section so every filter pass starts fresh.
+    // No behavior given: html's scroll-behavior (smooth, auto under
+    // reduced motion) and the section's scroll-margin-top decide it.
+    gallerySection.scrollIntoView({ block: "start" });
 
     if (count) {
       count.textContent = shown.length;
