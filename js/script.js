@@ -536,34 +536,3 @@ if (prefersReducedMotion.matches || !("IntersectionObserver" in window)) {
 
   items.forEach(item => plateObserver.observe(item));
 }
-
-// The ghost "Talk" word drifts against the scroll for a little depth behind
-// the contact plate. rAF-throttled, passive, and only computed while the
-// section is on screen. Skipped entirely under reduced motion (where CSS
-// also pins transform: none).
-const ghost = document.querySelector(".contact-ghost");
-
-if (ghost && !prefersReducedMotion.matches) {
-  let ghostFrame = false;
-
-  const updateGhost = () => {
-    const bounds = ghost.parentElement.getBoundingClientRect();
-
-    if (bounds.bottom > 0 && bounds.top < window.innerHeight) {
-      const progress =
-        (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height);
-      // Mid-scroll sits at 0, so the word only ever travels ~±23px.
-      ghost.style.transform = `translate3d(0, ${(0.5 - progress) * 46}px, 0)`;
-    }
-
-    ghostFrame = false;
-  };
-
-  window.addEventListener("scroll", () => {
-    if (ghostFrame) return;
-    ghostFrame = true;
-    requestAnimationFrame(updateGhost);
-  }, { passive: true });
-
-  updateGhost(); // covers reloads restored mid-page
-}
